@@ -140,6 +140,22 @@ function closeModal() {
     modal.style.display = 'none';
     paymentIframe.src = '';  // Clear iframe
     document.body.style.overflow = 'auto';  // Re-enable body scroll
+
+    // Hide the form and show success message
+    form.style.display = 'none';
+
+    // Create and show success message
+    const successDiv = document.createElement('div');
+    successDiv.className = 'final-success-message';
+    successDiv.innerHTML = `
+        <div class="success-icon-large">✓</div>
+        <h2>התשלום בוצע בהצלחה והפרטים נשלחו, תודה רבה!</h2>
+    `;
+
+    // Insert after the header
+    const container = document.querySelector('.container');
+    const header = container.querySelector('header');
+    header.insertAdjacentElement('afterend', successDiv);
 }
 
 // Listen for messages from payment iframe (optional - for advanced integration)
