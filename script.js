@@ -7,15 +7,14 @@ const PAYMENT_URLS = {
 
 // Google Form Configuration
 const GOOGLE_FORM_CONFIG = {
-    formBaseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScvIhTRz5qipe5-LULmoJoRqSuJbidzK7pYAdfqM7gR5P9wZw/viewform',
+    formActionUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScvIhTRz5qipe5-LULmoJoRqSuJbidzK7pYAdfqM7gR5P9wZw/formResponse',
     fields: {
-        fullName: 'entry.2041262357',
-        phone: 'entry.2134230907',
-        address: 'entry.534616599',
-        floor: 'entry.209408837',
-        apartment: 'entry.1881659987',
-        buildingCode: 'entry.628956368',
-        packageType: 'entry.547527955'
+        fullName: 'entry.1161423959',
+        phone: 'entry.289359022',
+        address: 'entry.302692334',
+        floor: 'entry.131956440',
+        apartment: 'entry.812903452',
+        buildingCode: 'entry.1096938954'
     }
 };
 
@@ -169,36 +168,49 @@ window.addEventListener('message', function(event) {
     }
 });
 
-// Submit form data to Google Forms using iframe pre-fill method
+// Submit form data to Google Forms via POST (without packageType field)
 function submitToGoogleForms(formData) {
-    // Map package type to the exact text in Google Form options
-    const packageTypeMap = {
-        'basic': 'מסלול ארד (120 ש"ח)',
-        'premium': 'מסלול כסף (180 ש"ח)',
-        'deluxe': 'מסלול זהב (300 ש"ח)'
-    };
+    console.log('Submitting to Google Forms:', formData);
 
-    // Build pre-filled URL with all form data
-    const params = new URLSearchParams();
-    params.append('embedded', 'true');
-    params.append(GOOGLE_FORM_CONFIG.fields.fullName, formData.fullName);
-    params.append(GOOGLE_FORM_CONFIG.fields.phone, formData.phone);
-    params.append(GOOGLE_FORM_CONFIG.fields.address, formData.address);
-    params.append(GOOGLE_FORM_CONFIG.fields.floor, formData.floor);
-    params.append(GOOGLE_FORM_CONFIG.fields.apartment, formData.apartment);
-    params.append(GOOGLE_FORM_CONFIG.fields.buildingCode, formData.buildingCode);
-    params.append(GOOGLE_FORM_CONFIG.fields.packageType, packageTypeMap[formData.packageType]);
+    // Create FormData for POST request
+    const googleFormData = new FormData();
 
-    const prefilledUrl = `${GOOGLE_FORM_CONFIG.formBaseUrl}?${params.toString()}`;
+    // Add only the delivery fields (no packageType since it was removed from Google Form)
+    googleFormData.append(GOOGLE_FORM_CONFIG.fields.fullName, formData.fullName);
+    googleFormData.append(GOOGLE_FORM_CONFIG.fields.phone, formData.phone);
+    googleFormData.append(GOOGLE_FORM_CONFIG.fields.address, formData.address);
+    googleFormData.append(GOOGLE_FORM_CONFIG.fields.floor, formData.floor);
+    googleFormData.append(GOOGLE_FORM_CONFIG.fields.apartment, formData.apartment);
 
-    console.log('Opening pre-filled Google Form:', prefilledUrl);
+    // Only add buildingCode if it has a value
+    if (formData.buildingCode) {
+        googleFormData.append(GOOGLE_FORM_CONFIG.fields.buildingCode, formData.buildingCode);
+    }
 
-    // Open the pre-filled form in a new modal
-    showGoogleFormModal(prefilledUrl);
+    // Log what we're sending
+    console.log('Form fields being submitted:');
+    for (let [key, value] of googleFormData.entries()) {
+        console.log(`  ${key}: ${value}`);
+    }
 
-    // Clear the form
-    form.reset();
-    window.pendingFormData = null;
+    // Submit to Google Forms
+    fetch(GOOGLE_FORM_CONFIG.formActionUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: googleFormData
+    })
+    .then(() => {
+        console.log('✓ Form submitted successfully to Google Forms');
+        showSuccessMessage('תודה רבה! פרטי המשלוח נשלחו בהצלחה.');
+
+        // Clear the form and pending data
+        form.reset();
+        window.pendingFormData = null;
+    })
+    .catch(error => {
+        console.error('✗ Error submitting to Google Forms:', error);
+        showSuccessMessage('השליחה נכשלה');
+    });
 }
 
 // Helper function to show info message
@@ -240,50 +252,4 @@ function showSuccessMessage(message) {
     }, 5000);
 }
 
-// Show Google Form in a modal with pre-filled data
-function showGoogleFormModal(prefilledUrl) {
-    // Create modal overlay
-    const formModal = document.createElement('div');
-    formModal.id = 'googleFormModal';
-    formModal.className = 'modal';
-    formModal.style.display = 'block';
-
-    formModal.innerHTML = `
-        <div class="modal-content">
-            <span class="close" onclick="closeGoogleFormModal()">&times;</span>
-            <h2>השלמת פרטי ההזמנה</h2>
-            <p>הטופס מולא מראש עם הפרטים שלכם. אנא בדקו ולחצו "שליחה" בטופס למטה.</p>
-            <div id="googleFormFrame">
-                <iframe id="googleFormIframe" src="${prefilledUrl}" width="100%" height="1200" frameborder="0" marginheight="0" marginwidth="0">בטעינה…</iframe>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(formModal);
-    document.body.style.overflow = 'hidden';
-
-    // Close modal when clicking outside
-    formModal.addEventListener('click', function(event) {
-        if (event.target === formModal) {
-            closeGoogleFormModal();
-        }
-    });
-
-    // Close modal with ESC key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && formModal.style.display === 'block') {
-            closeGoogleFormModal();
-        }
-    });
-}
-
-// Close Google Form modal
-function closeGoogleFormModal() {
-    const formModal = document.getElementById('googleFormModal');
-    if (formModal) {
-        formModal.remove();
-        document.body.style.overflow = 'auto';
-        showSuccessMessage('תודה רבה! אם שלחתם את הטופס, ההזמנה שלכם נקלטה.');
-    }
-}
 
