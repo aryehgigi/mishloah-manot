@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משלוח מנות קהילתי</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>משלוח מנות קהילתי - יפה נוף (התשפ"ו)</h1>
+            <p class="subtitle">בחרו מסלול ושלמו, ולאחר מכן מלאו את הטופס</p>
+        </header>
+
+        <!-- Payment Instructions -->
+        <div class="payment-section">
+            <h2>שלב 1: בחרו מסלול והמשיכו לתשלום</h2>
+            <p class="payment-instructions">בחרו את המסלול המתאים לכם</p>
+
+            <div class="payment-buttons">
+                <button class="payment-btn basic" onclick="selectPackage(1, 'basic')">
+                    <strong>מסלול ארד</strong>
+                    <span class="price">120 ש"ח</span>
+                </button>
+
+                <button class="payment-btn premium" onclick="selectPackage(2, 'premium')">
+                    <strong>מסלול כסף</strong>
+                    <span class="price">180 ש"ח</span>
+                </button>
+
+                <button class="payment-btn deluxe" onclick="selectPackage(3, 'deluxe')">
+                    <strong>מסלול זהב</strong>
+                    <span class="price">300 ש"ח</span>
+                </button>
+            </div>
+
+            <!-- Embedded Payment Frame -->
+            <div id="paymentContainer" class="payment-container" style="display: none;">
+                <h3>השלימו את התשלום:</h3>
+                <iframe id="paymentIframeEmbed" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+
+        <!-- Google Form Embedded -->
+        <div class="google-form-container">
+            <h2 class="form-title">שלב 2: מלאו את פרטי המשלוח</h2>
+            <p class="form-instructions">לאחר התשלום, אנא מלאו את הטופס הבא עם פרטי המשלוח שלכם</p>
+            <iframe
+                src="https://docs.google.com/forms/d/e/1FAIpQLScvIhTRz5qipe5-LULmoJoRqSuJbidzK7pYAdfqM7gR5P9wZw/viewform?embedded=true"
+                width="100%"
+                height="1360"
+                frameborder="0"
+                marginheight="0"
+                marginwidth="0">
+                בטעינה…
+            </iframe>
+        </div>
+
+    </div>
+
+    <script src="script_simple.js"></script>
+</body>
+</html>
