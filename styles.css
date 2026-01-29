@@ -194,6 +194,62 @@ form {
     font-weight: bold;
 }
 
+/* Compact Package Selection */
+.package-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.package-card {
+    position: relative;
+    display: block;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: white;
+    text-align: center;
+}
+
+.package-card:hover {
+    border-color: #5fa8a8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(95, 168, 168, 0.15);
+}
+
+.package-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.package-card:has(input:checked) {
+    border-color: #5fa8a8;
+    background: linear-gradient(135deg, #f0f8f8 0%, #e8f5f5 100%);
+    box-shadow: 0 4px 12px rgba(95, 168, 168, 0.3);
+    transform: translateY(-2px);
+}
+
+.package-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.package-name {
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+}
+
+.package-price {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #5fa8a8;
+}
+
 
 /* Submit Button */
 .form-actions {
@@ -587,6 +643,17 @@ footer a:hover {
     display: block;
 }
 
+@media (max-width: 768px) {
+    .package-options {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .package-card {
+        padding: 12px;
+    }
+}
+
 @media (max-width: 480px) {
     header {
         padding: 30px 20px;
@@ -652,5 +719,17 @@ footer a:hover {
 
     #paymentIframeEmbed {
         height: 600px;
+    }
+
+    .package-options {
+        gap: 10px;
+    }
+
+    .package-name {
+        font-size: 0.95em;
+    }
+
+    .package-price {
+        font-size: 1em;
     }
 }

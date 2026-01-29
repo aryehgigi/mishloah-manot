@@ -14,38 +14,6 @@
         </header>
 
         <form id="orderForm">
-            <!-- Package Selection Section -->
-            <div class="form-section">
-                <h2>בחרו מסלול</h2>
-                <div class="form-group">
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="packageType" value="basic" data-popup="1" required>
-                            <span class="radio-label">
-                                <strong>מסלול ארד</strong>
-                                <span class="price">120 ש"ח</span>
-                            </span>
-                        </label>
-
-                        <label class="radio-option">
-                            <input type="radio" name="packageType" value="premium" data-popup="2" required>
-                            <span class="radio-label">
-                                <strong>מסלול כסף</strong>
-                                <span class="price">180 ש"ח</span>
-                            </span>
-                        </label>
-
-                        <label class="radio-option">
-                            <input type="radio" name="packageType" value="deluxe" data-popup="3" required>
-                            <span class="radio-label">
-                                <strong>מסלול זהב</strong>
-                                <span class="price">300 ש"ח</span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
             <!-- Personal Information Section -->
             <div class="form-section">
                 <h2>פרטי משלוח</h2>
@@ -78,6 +46,38 @@
                 <div class="form-group">
                     <label for="buildingCode">קוד לבניין <span class="optional">(לא חובה אבל עדיף)</span></label>
                     <input type="text" id="buildingCode" name="buildingCode">
+                </div>
+            </div>
+
+            <!-- Package Selection Section -->
+            <div class="form-section">
+                <h2>בחרו מסלול</h2>
+                <div class="form-group">
+                    <div class="package-options">
+                        <label class="package-card">
+                            <input type="radio" name="packageType" value="basic" data-popup="1" required>
+                            <div class="package-content">
+                                <span class="package-name">מסלול ארד</span>
+                                <span class="package-price">120 ש"ח</span>
+                            </div>
+                        </label>
+
+                        <label class="package-card">
+                            <input type="radio" name="packageType" value="premium" data-popup="2" required>
+                            <div class="package-content">
+                                <span class="package-name">מסלול כסף</span>
+                                <span class="package-price">180 ש"ח</span>
+                            </div>
+                        </label>
+
+                        <label class="package-card">
+                            <input type="radio" name="packageType" value="deluxe" data-popup="3" required>
+                            <div class="package-content">
+                                <span class="package-name">מסלול זהב</span>
+                                <span class="package-price">300 ש"ח</span>
+                            </div>
+                        </label>
+                    </div>
                 </div>
             </div>
 
