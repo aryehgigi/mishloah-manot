@@ -14,7 +14,8 @@ const GOOGLE_FORM_CONFIG = {
         address: 'entry.302692334',
         floor: 'entry.131956440',
         apartment: 'entry.812903452',
-        buildingCode: 'entry.1096938954'
+        buildingCode: 'entry.1096938954',
+        packageType: 'entry.1030064960'
     }
 };
 
@@ -61,9 +62,6 @@ form.addEventListener('submit', function(e) {
     };
 
     console.log('Form Data:', formData);
-
-    // Show message to user
-    showInfoMessage('פותחים חלון תשלום. לאחר השלמת התשלום או סגירת החלון, פרטי ההזמנה שלכם יישלחו.');
 
     // Open payment modal
     openModalPopup(paymentUrl, formData);
@@ -168,19 +166,20 @@ window.addEventListener('message', function(event) {
     }
 });
 
-// Submit form data to Google Forms via POST (without packageType field)
+// Submit form data to Google Forms via POST (including packageType)
 function submitToGoogleForms(formData) {
     console.log('Submitting to Google Forms:', formData);
 
     // Create FormData for POST request
     const googleFormData = new FormData();
 
-    // Add only the delivery fields (no packageType since it was removed from Google Form)
+    // Add all form fields including package selection
     googleFormData.append(GOOGLE_FORM_CONFIG.fields.fullName, formData.fullName);
     googleFormData.append(GOOGLE_FORM_CONFIG.fields.phone, formData.phone);
     googleFormData.append(GOOGLE_FORM_CONFIG.fields.address, formData.address);
     googleFormData.append(GOOGLE_FORM_CONFIG.fields.floor, formData.floor);
     googleFormData.append(GOOGLE_FORM_CONFIG.fields.apartment, formData.apartment);
+    googleFormData.append(GOOGLE_FORM_CONFIG.fields.packageType, formData.packageType);
 
     // Only add buildingCode if it has a value
     if (formData.buildingCode) {
@@ -201,7 +200,7 @@ function submitToGoogleForms(formData) {
     })
     .then(() => {
         console.log('✓ Form submitted successfully to Google Forms');
-        showSuccessMessage('תודה רבה! פרטי המשלוח נשלחו בהצלחה.');
+        showSuccessMessage('תודה רבה! התשלום בוצע והפרטים נשלחו בהצלחה.');
 
         // Clear the form and pending data
         form.reset();
