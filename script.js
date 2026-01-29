@@ -25,9 +25,6 @@ const modal = document.getElementById('paymentModal');
 const closeBtn = document.querySelector('.close');
 const paymentIframe = document.getElementById('paymentIframe');
 
-// Track if payment popup was opened (we'll submit to Google Forms after)
-let paymentProcessed = false;
-
 // Form submission handler
 form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -63,11 +60,11 @@ form.addEventListener('submit', function(e) {
 
     console.log('Form Data:', formData);
 
+    // Submit to Google Forms immediately
+    submitToGoogleForms(formData);
+
     // Open payment modal
     openModalPopup(paymentUrl, formData);
-
-    // Store form data for later submission
-    window.pendingFormData = formData;
 });
 
 // Function to open payment in modal
@@ -143,12 +140,6 @@ function closeModal() {
     modal.style.display = 'none';
     paymentIframe.src = '';  // Clear iframe
     document.body.style.overflow = 'auto';  // Re-enable body scroll
-
-    // After closing payment modal, show Google Form with pre-filled data
-    if (window.pendingFormData && !paymentProcessed) {
-        paymentProcessed = true;
-        submitToGoogleForms(window.pendingFormData);
-    }
 }
 
 // Listen for messages from payment iframe (optional - for advanced integration)
@@ -200,15 +191,11 @@ function submitToGoogleForms(formData) {
     })
     .then(() => {
         console.log('✓ Form submitted successfully to Google Forms');
-        showSuccessMessage('תודה רבה! התשלום בוצע והפרטים נשלחו בהצלחה.');
-
-        // Clear the form and pending data
-        form.reset();
-        window.pendingFormData = null;
+        // Don't show message or reset form - user is being redirected to payment
     })
     .catch(error => {
         console.error('✗ Error submitting to Google Forms:', error);
-        showSuccessMessage('השליחה נכשלה');
+        alert('שגיאה בשליחת הטופס. אנא נסו שוב.');
     });
 }
 
